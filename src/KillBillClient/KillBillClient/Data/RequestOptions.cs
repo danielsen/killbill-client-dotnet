@@ -37,39 +37,39 @@ namespace KillBillClient.Data
             QueryParamsForFollow = queryParamsForFollow ?? new MultiMap<string>();
         }
 
-        public string RequestId { get; }
+        public string Comment { get; }
 
-        public string User { get; }
-
-        public string Password { get; }
+        public string ContentType { get; }
 
         public string CreatedBy { get; }
 
+        public bool? FollowLocation { get; }
+
+        public ImmutableDictionary<string, string> Headers { get; }
+
+        public string Password { get; }
+
+        public MultiMap<string> QueryParams { get; }
+
+        public MultiMap<string> QueryParamsForFollow { get; }
+
         public string Reason { get; }
 
-        public string Comment { get; }
+        public string RequestId { get; }
 
         public string TenantApiKey { get; }
 
         public string TenantApiSecret { get; }
 
-        public string ContentType { get; }
-
-        public ImmutableDictionary<string, string> Headers { get; }
-
-        public MultiMap<string> QueryParams { get; }
-
-        public bool? FollowLocation { get; }
-
-        public MultiMap<string> QueryParamsForFollow { get; }
+        public string User { get; }
 
         /// <summary>
-        /// Helper method for creating an empty RequestOptions object.
+        /// Helper method for creating a new builder.
         /// </summary>
-        /// <returns>An empty <see cref="RequestOptions"/> object.</returns>
-        public static RequestOptions Empty()
+        /// <returns>A new instance of <see cref="RequestOptionsBuilder"/>.</returns>
+        public static RequestOptionsBuilder Builder()
         {
-            return new RequestOptionsBuilder().Build();
+            return new RequestOptionsBuilder();
         }
 
         /// <summary>
@@ -91,12 +91,12 @@ namespace KillBillClient.Data
         }
 
         /// <summary>
-        /// Helper method for creating a new builder.
+        /// Helper method for creating an empty RequestOptions object.
         /// </summary>
-        /// <returns>A new instance of <see cref="RequestOptionsBuilder"/>.</returns>
-        public static RequestOptionsBuilder Builder()
+        /// <returns>An empty <see cref="RequestOptions"/> object.</returns>
+        public static RequestOptions Empty()
         {
-            return new RequestOptionsBuilder();
+            return new RequestOptionsBuilder().Build();
         }
 
         /// <summary>

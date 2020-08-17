@@ -62,42 +62,48 @@ namespace KillBillClient.Implementations.Managers
             return await _client.Put<Bundle>(uri, bundle, requestOptions);
         }
 
-        public async Task BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions,
+            DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
 
             var uri = Configuration.BUNDLES_PATH + "/" + bundleId + "/" + Configuration.BLOCK;
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
-            if (requestedDate.HasValue) queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            if (requestedDate.HasValue)
+                queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
             await _client.Put(uri, blockingState, requestOptions);
         }
 
-        public async Task PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null,
+            Dictionary<string, string> pluginProperties = null)
         {
             if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
 
             var uri = Configuration.BUNDLES_PATH + "/" + bundleId + "/" + Configuration.PAUSE;
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
-            if (requestedDate.HasValue) queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            if (requestedDate.HasValue)
+                queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
             await _client.Put(uri, null, requestOptions);
         }
 
-        public async Task ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null,
+            Dictionary<string, string> pluginProperties = null)
         {
             if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
 
             var uri = Configuration.BUNDLES_PATH + "/" + bundleId + "/" + Configuration.RESUME;
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
-            if (requestedDate.HasValue) queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            if (requestedDate.HasValue)
+                queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
@@ -105,7 +111,8 @@ namespace KillBillClient.Implementations.Managers
         }
 
         // BUNDLES
-        public async Task<Bundles> GetBundles(RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Bundles> GetBundles(RequestOptions inputOptions, long offset = 0L, long limit = 100L,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.BUNDLES_PATH + "/" + Configuration.PAGINATION;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
@@ -116,7 +123,8 @@ namespace KillBillClient.Implementations.Managers
             return await _client.Get<Bundles>(uri, requestOptions);
         }
 
-        public async Task<Bundles> SearchBundles(string key, RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Bundles> SearchBundles(string key, RequestOptions inputOptions, long offset = 0L,
+            long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.BUNDLES_PATH + "/" + Configuration.SEARCH + "/" + HttpUtility.UrlEncode(key);
 

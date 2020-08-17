@@ -30,7 +30,8 @@ namespace KillBillClient.Implementations.Managers
             var followLocation = inputOptions.FollowLocation ?? true;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_TENANT_USE_GLOBAL_DEFAULT, useGlobalDefault.ToString());
-            var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams).Build();
+            var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams)
+                .Build();
             return await _client.Post<Tenant>(Configuration.TENANTS_PATH, tenant, requestOptions);
         }
 
@@ -56,7 +57,8 @@ namespace KillBillClient.Implementations.Managers
             var followLocation = inputOptions.FollowLocation ?? true;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_NOTIFICATION_CALLBACK, callback);
-            var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams).Build();
+            var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams)
+                .Build();
             return await _client.Post<TenantKey>(uri, null, requestOptions);
         }
 

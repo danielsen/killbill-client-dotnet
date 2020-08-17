@@ -12,10 +12,10 @@ namespace KillBillClient.Implementations
     public class KillBillClient : IKillBillClient
     {
         private const AuditLevel DefaultAuditLevel = AuditLevel.NONE;
-        private readonly KillBillConfiguration _config;
         private readonly KillBillAccountManager _accountManager;
         private readonly KillBillBundleManager _bundleManager;
         private readonly KillBillCatalogManager _catalogManager;
+        private readonly KillBillConfiguration _config;
         private readonly KillBillInvoiceManager _invoiceManager;
         private readonly KillBillNotificationManager _notificationManager;
         private readonly KillBillPaymentManager _paymentManager;
@@ -37,23 +37,26 @@ namespace KillBillClient.Implementations
             _tenantManager = new KillBillTenantManager(client);
         }
 
-        public RequestOptions BaseOptions(string createdBy = null, string requestId = null, string reason = null, string comment = null)
+        public RequestOptions BaseOptions(string createdBy = null, string requestId = null, string reason = null,
+            string comment = null)
         {
             return RequestOptions.Default(_config)
-                                 .Extend()
-                                 .WithCreatedBy(createdBy)
-                                 .WithReason(reason)
-                                 .WithComment(comment)
-                                 .Build();
+                .Extend()
+                .WithCreatedBy(createdBy)
+                .WithReason(reason)
+                .WithComment(comment)
+                .Build();
         }
 
         // ACCOUNT
-        public async Task<Account> GetAccount(Guid accountId, RequestOptions inputOptions, bool withBalance = false, bool withCba = false)
+        public async Task<Account> GetAccount(Guid accountId, RequestOptions inputOptions, bool withBalance = false,
+            bool withCba = false)
         {
             return await _accountManager.GetAccount(accountId, inputOptions, withBalance, withCba);
         }
 
-        public async Task<Account> GetAccount(string externalKey, RequestOptions inputOptions, bool withBalance = false, bool withCba = false)
+        public async Task<Account> GetAccount(string externalKey, RequestOptions inputOptions, bool withBalance = false,
+            bool withCba = false)
         {
             return await _accountManager.GetAccount(externalKey, inputOptions, withBalance, withCba);
         }
@@ -73,7 +76,8 @@ namespace KillBillClient.Implementations
             return await _accountManager.UpdateAccount(account, treatNullAsReset, inputOptions);
         }
 
-        public async Task BlockAccount(Guid accountId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task BlockAccount(Guid accountId, BlockingState blockingState, RequestOptions inputOptions,
+            DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             await _accountManager.BlockAccount(accountId, blockingState, inputOptions, requestedDate, pluginProperties);
         }
@@ -84,7 +88,8 @@ namespace KillBillClient.Implementations
             return await _accountManager.GetAccounts(inputOptions);
         }
 
-        public async Task<Accounts> GetAccounts(long offset, long limit, RequestOptions inputOptions, AuditLevel auditLevel = AuditLevel.NONE)
+        public async Task<Accounts> GetAccounts(long offset, long limit, RequestOptions inputOptions,
+            AuditLevel auditLevel = AuditLevel.NONE)
         {
             return await _accountManager.GetAccounts(offset, limit, inputOptions, auditLevel);
         }
@@ -106,7 +111,8 @@ namespace KillBillClient.Implementations
         }
 
         // ACCOUNT TIMELINE
-        public async Task<AccountTimeline> GetAccountTimeline(Guid accountId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<AccountTimeline> GetAccountTimeline(Guid accountId, RequestOptions inputOptions,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _accountManager.GetAccountTimeline(accountId, inputOptions, auditLevel);
         }
@@ -138,28 +144,33 @@ namespace KillBillClient.Implementations
             return await _bundleManager.TransferBundle(bundle, inputOptions);
         }
 
-        public async Task BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions,
+            DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             await _bundleManager.BlockBundle(bundleId, blockingState, inputOptions, requestedDate, pluginProperties);
         }
 
-        public async Task PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null,
+            Dictionary<string, string> pluginProperties = null)
         {
             await _bundleManager.PauseBundle(bundleId, inputOptions, requestedDate, pluginProperties);
         }
 
-        public async Task ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null,
+            Dictionary<string, string> pluginProperties = null)
         {
             await _bundleManager.ResumeBundle(bundleId, inputOptions, requestedDate, pluginProperties);
         }
 
         // BUNDLES
-        public async Task<Bundles> GetBundles(RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Bundles> GetBundles(RequestOptions inputOptions, long offset = 0L, long limit = 100L,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _bundleManager.GetBundles(inputOptions, offset, limit, auditLevel);
         }
 
-        public async Task<Bundles> SearchBundles(string key, RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Bundles> SearchBundles(string key, RequestOptions inputOptions, long offset = 0L,
+            long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _bundleManager.SearchBundles(key, inputOptions, offset, limit, auditLevel);
         }
@@ -175,19 +186,22 @@ namespace KillBillClient.Implementations
             await _catalogManager.UploadCatalogXml(catalogXml, inputOptions);
         }
 
-        public async Task<Plan> GetPlanFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+        public async Task<Plan> GetPlanFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            DateTime? requestedDate = null)
         {
             return await _catalogManager.GetPlanFromSubscription(subscriptionId, inputOptions, requestedDate);
         }
 
         // PRICE LIST
-        public async Task<PriceList> GetPriceListFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+        public async Task<PriceList> GetPriceListFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            DateTime? requestedDate = null)
         {
             return await _catalogManager.GetPriceListFromSubscription(subscriptionId, inputOptions, requestedDate);
         }
 
         // PRODUCT
-        public async Task<Product> GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+        public async Task<Product> GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            DateTime? requestedDate = null)
         {
             return await _catalogManager.GetProductFromSubscription(subscriptionId, inputOptions, requestedDate);
         }
@@ -198,14 +212,18 @@ namespace KillBillClient.Implementations
             return await _invoiceManager.CreateInvoice(accountId, futureDate, inputOptions);
         }
 
-        public async Task<Invoice> GetInvoice(int invoiceNumber, RequestOptions inputOptions, bool withItems = false, bool withChildrenItems = false, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Invoice> GetInvoice(int invoiceNumber, RequestOptions inputOptions, bool withItems = false,
+            bool withChildrenItems = false, AuditLevel auditLevel = DefaultAuditLevel)
         {
-            return await _invoiceManager.GetInvoice(invoiceNumber, inputOptions, withItems, withChildrenItems, auditLevel);
+            return await _invoiceManager.GetInvoice(invoiceNumber, inputOptions, withItems, withChildrenItems,
+                auditLevel);
         }
 
-        public async Task<Invoice> GetInvoice(string invoiceIdOrNumber, RequestOptions inputOptions, bool withItems = false, bool withChildrenItems = false, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Invoice> GetInvoice(string invoiceIdOrNumber, RequestOptions inputOptions,
+            bool withItems = false, bool withChildrenItems = false, AuditLevel auditLevel = DefaultAuditLevel)
         {
-            return await _invoiceManager.GetInvoice(invoiceIdOrNumber, inputOptions, withItems, withChildrenItems, auditLevel);
+            return await _invoiceManager.GetInvoice(invoiceIdOrNumber, inputOptions, withItems, withChildrenItems,
+                auditLevel);
         }
 
         // INVOICES
@@ -214,14 +232,18 @@ namespace KillBillClient.Implementations
             return await _invoiceManager.GetInvoices(inputOptions);
         }
 
-        public async Task<Invoices> GetInvoices(bool withItems, long offset, long limit, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Invoices> GetInvoices(bool withItems, long offset, long limit, RequestOptions inputOptions,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _invoiceManager.GetInvoices(withItems, offset, limit, inputOptions, auditLevel);
         }
 
-        public async Task<Invoices> GetInvoicesForAccount(Guid accountId, RequestOptions inputOptions, bool withItems = false, bool unpaidOnly = false, bool includeMigrationInvoices = false, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Invoices> GetInvoicesForAccount(Guid accountId, RequestOptions inputOptions,
+            bool withItems = false, bool unpaidOnly = false, bool includeMigrationInvoices = false,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
-            return await _invoiceManager.GetInvoicesForAccount(accountId, inputOptions, withItems, unpaidOnly, includeMigrationInvoices, auditLevel);
+            return await _invoiceManager.GetInvoicesForAccount(accountId, inputOptions, withItems, unpaidOnly,
+                includeMigrationInvoices, auditLevel);
         }
 
         public async Task<Invoices> SearchInvoices(string key, RequestOptions inputOptions)
@@ -235,14 +257,19 @@ namespace KillBillClient.Implementations
         }
 
         // INVOICE ITEM
-        public async Task<List<InvoiceItem>> CreateExternalCharges(IEnumerable<InvoiceItem> externalCharges, DateTime? requestedDate, bool autoPay, bool autoCommit, RequestOptions inputOptions)
+        public async Task<List<InvoiceItem>> CreateExternalCharges(IEnumerable<InvoiceItem> externalCharges,
+            DateTime? requestedDate, bool autoPay, bool autoCommit, RequestOptions inputOptions)
         {
-            return await _invoiceManager.CreateExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, inputOptions);
+            return await _invoiceManager.CreateExternalCharges(externalCharges, requestedDate, autoPay, autoCommit,
+                inputOptions);
         }
 
-        public async Task<List<InvoiceItem>> CreateExternalCharges(IEnumerable<InvoiceItem> externalCharges, DateTime? requestedDate, bool autoPay, bool autoCommit, string paymentExternalKey, string transactionExternalKey, RequestOptions inputOptions)
+        public async Task<List<InvoiceItem>> CreateExternalCharges(IEnumerable<InvoiceItem> externalCharges,
+            DateTime? requestedDate, bool autoPay, bool autoCommit, string paymentExternalKey,
+            string transactionExternalKey, RequestOptions inputOptions)
         {
-            return await _invoiceManager.CreateExternalCharges(externalCharges, requestedDate, autoPay, autoCommit, paymentExternalKey, transactionExternalKey, inputOptions);
+            return await _invoiceManager.CreateExternalCharges(externalCharges, requestedDate, autoPay, autoCommit,
+                paymentExternalKey, transactionExternalKey, inputOptions);
         }
 
         // CREDIT
@@ -251,7 +278,8 @@ namespace KillBillClient.Implementations
             return await _invoiceManager.CreateCredit(credit, autoCommit, inputOptions);
         }
 
-        public async Task<Credit> GetCredit(Guid creditId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Credit> GetCredit(Guid creditId, RequestOptions inputOptions,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _invoiceManager.GetCredit(creditId, inputOptions, auditLevel);
         }
@@ -268,51 +296,66 @@ namespace KillBillClient.Implementations
         }
 
         // PAYMENT
-        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction,
+            RequestOptions inputOptions)
         {
             return await _paymentManager.CreatePayment(accountId, paymentTransaction, inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction, Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction,
+            Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
         {
             return await _paymentManager.CreatePayment(accountId, paymentTransaction, pluginProperties, inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId, PaymentTransaction paymentTransaction, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId,
+            PaymentTransaction paymentTransaction, RequestOptions inputOptions)
         {
             return await _paymentManager.CreatePayment(accountId, paymentMethodId, paymentTransaction, inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId, PaymentTransaction paymentTransaction, Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId,
+            PaymentTransaction paymentTransaction, Dictionary<string, string> pluginProperties,
+            RequestOptions inputOptions)
         {
-            return await _paymentManager.CreatePayment(accountId, paymentMethodId, paymentTransaction, pluginProperties, inputOptions);
+            return await _paymentManager.CreatePayment(accountId, paymentMethodId, paymentTransaction, pluginProperties,
+                inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId, PaymentTransaction paymentTransaction, List<string> controlPluginNames, Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId,
+            PaymentTransaction paymentTransaction, List<string> controlPluginNames,
+            Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
         {
-            return await _paymentManager.CreatePayment(accountId, paymentMethodId, paymentTransaction, controlPluginNames, pluginProperties, inputOptions);
+            return await _paymentManager.CreatePayment(accountId, paymentMethodId, paymentTransaction,
+                controlPluginNames, pluginProperties, inputOptions);
         }
 
         // PAYMENTS
-        public async Task<Payments> GetPaymentsForAccount(Guid accountId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Payments> GetPaymentsForAccount(Guid accountId, RequestOptions inputOptions,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _paymentManager.GetPaymentsForAccount(accountId, inputOptions, auditLevel);
         }
 
-        public async Task<InvoicePayments> GetInvoicePaymentsForAccount(Guid accountId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<InvoicePayments> GetInvoicePaymentsForAccount(Guid accountId, RequestOptions inputOptions,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _paymentManager.GetInvoicePaymentsForAccount(accountId, inputOptions, auditLevel);
         }
 
         // PAYMENT METHOD
-        public async Task<PaymentMethod> GetPaymentMethod(Guid paymentMethodId, RequestOptions inputOptions, bool withPluginInfo = false, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<PaymentMethod> GetPaymentMethod(Guid paymentMethodId, RequestOptions inputOptions,
+            bool withPluginInfo = false, AuditLevel auditLevel = DefaultAuditLevel)
         {
             return await _paymentManager.GetPaymentMethod(paymentMethodId, inputOptions, withPluginInfo, auditLevel);
         }
 
-        public async Task<PaymentMethods> GetPaymentMethodsForAccount(Guid accountId, RequestOptions inputOptions, Dictionary<string, string> pluginProperties = null, bool withPluginInfo = false, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<PaymentMethods> GetPaymentMethodsForAccount(Guid accountId, RequestOptions inputOptions,
+            Dictionary<string, string> pluginProperties = null, bool withPluginInfo = false,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
-            return await _paymentManager.GetPaymentMethodsForAccount(accountId, inputOptions, pluginProperties, withPluginInfo, auditLevel);
+            return await _paymentManager.GetPaymentMethodsForAccount(accountId, inputOptions, pluginProperties,
+                withPluginInfo, auditLevel);
         }
 
         public async Task<PaymentMethod> CreatePaymentMethod(PaymentMethod paymentMethod, RequestOptions inputOptions)
@@ -320,7 +363,8 @@ namespace KillBillClient.Implementations
             return await _paymentManager.CreatePaymentMethod(paymentMethod, inputOptions);
         }
 
-        public async Task DeletePaymentMethod(Guid paymentMethodId, RequestOptions inputOptions, bool deleteDefault = false, bool forceDeleteDefault = false)
+        public async Task DeletePaymentMethod(Guid paymentMethodId, RequestOptions inputOptions,
+            bool deleteDefault = false, bool forceDeleteDefault = false)
         {
             await _paymentManager.DeletePaymentMethod(paymentMethodId, inputOptions, deleteDefault, forceDeleteDefault);
         }
@@ -347,39 +391,53 @@ namespace KillBillClient.Implementations
             return await _subscriptionManager.GetSubscription(subscriptionId, inputOptions);
         }
 
-        public async Task<Subscription> CreateSubscription(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, bool? isMigrated = null)
+        public async Task<Subscription> CreateSubscription(Subscription subscription, RequestOptions inputOptions,
+            DateTime? requestedDate = null, bool? isMigrated = null)
         {
             return await _subscriptionManager.CreateSubscription(subscription, inputOptions, requestedDate, isMigrated);
         }
 
-        public async Task<Subscription> UpdateSubscription(Subscription subscription, RequestOptions inputOptions, BillingActionPolicy? billingPolicy = null, DateTime? requestedDate = null, bool? isMigrated = null)
+        public async Task<Subscription> UpdateSubscription(Subscription subscription, RequestOptions inputOptions,
+            BillingActionPolicy? billingPolicy = null, DateTime? requestedDate = null, bool? isMigrated = null)
         {
-            return await _subscriptionManager.UpdateSubscription(subscription, inputOptions, billingPolicy, requestedDate, isMigrated);
+            return await _subscriptionManager.UpdateSubscription(subscription, inputOptions, billingPolicy,
+                requestedDate, isMigrated);
         }
 
-        public async Task CancelSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null, bool? useRequestedDateForBilling = null, EntitlementActionPolicy? entitlementPolicy = null, BillingActionPolicy? billingPolicy = null)
+        public async Task CancelSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            DateTime? requestedDate = null, bool? useRequestedDateForBilling = null,
+            EntitlementActionPolicy? entitlementPolicy = null, BillingActionPolicy? billingPolicy = null)
         {
-            await _subscriptionManager.CancelSubscription(subscriptionId, inputOptions, requestedDate, useRequestedDateForBilling, entitlementPolicy, billingPolicy);
+            await _subscriptionManager.CancelSubscription(subscriptionId, inputOptions, requestedDate,
+                useRequestedDateForBilling, entitlementPolicy, billingPolicy);
         }
 
-        public async Task UncancelSubscription(Guid subscriptionId, RequestOptions inputOptions, Dictionary<string, string> pluginProperties = null)
+        public async Task UncancelSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            Dictionary<string, string> pluginProperties = null)
         {
             await _subscriptionManager.UncancelSubscription(subscriptionId, inputOptions, pluginProperties);
         }
 
-        public async Task<Bundle> CreateSubscriptionWithAddOns(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        public async Task<Bundle> CreateSubscriptionWithAddOns(Subscription subscription, RequestOptions inputOptions,
+            DateTime? requestedDate = null, int? timeoutSec = null)
         {
-            return await _subscriptionManager.CreateSubscriptionWithAddOns(subscription, inputOptions, requestedDate, timeoutSec);
+            return await _subscriptionManager.CreateSubscriptionWithAddOns(subscription, inputOptions, requestedDate,
+                timeoutSec);
         }
 
-        public async Task<Bundle> CreateSubscriptionsWithAddOns(IEnumerable<Subscription> subscriptions, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        public async Task<Bundle> CreateSubscriptionsWithAddOns(IEnumerable<Subscription> subscriptions,
+            RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
         {
-            return await _subscriptionManager.CreateSubscriptionsWithAddOns(subscriptions, inputOptions, requestedDate, timeoutSec);
+            return await _subscriptionManager.CreateSubscriptionsWithAddOns(subscriptions, inputOptions, requestedDate,
+                timeoutSec);
         }
 
-        public async Task BlockSubscription(Guid subscriptionId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task BlockSubscription(Guid subscriptionId, BlockingState blockingState,
+            RequestOptions inputOptions, DateTime? requestedDate = null,
+            Dictionary<string, string> pluginProperties = null)
         {
-            await _subscriptionManager.BlockSubscription(subscriptionId, blockingState, inputOptions, requestedDate, pluginProperties);
+            await _subscriptionManager.BlockSubscription(subscriptionId, blockingState, inputOptions, requestedDate,
+                pluginProperties);
         }
 
         // TENANT

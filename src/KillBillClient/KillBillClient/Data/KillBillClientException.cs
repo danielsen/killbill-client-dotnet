@@ -25,17 +25,18 @@ namespace KillBillClient.Data
             BillingMessage = billingMessage;
         }
 
-        public KillBillClientException(string message, string httpStatusCode, string billingCode, string billingMessage, Exception innerException)
+        public KillBillClientException(string message, string httpStatusCode, string billingCode, string billingMessage,
+            Exception innerException)
             : base(message, innerException)
         {
             HttpStatusCode = httpStatusCode;
             BillingMessage = billingMessage;
         }
 
-        public string HttpStatusCode { get; set; }
+        public string BillingCode { get; set; }
 
         public string BillingMessage { get; set; }
 
-        public string BillingCode { get; set; }
+        public string HttpStatusCode { get; set; }
     }
 }

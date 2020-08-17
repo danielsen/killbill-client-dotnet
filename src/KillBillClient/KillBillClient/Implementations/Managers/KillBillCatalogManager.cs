@@ -59,8 +59,9 @@ namespace KillBillClient.Implementations.Managers
 
             return await _client.Get<List<PlanDetail>>(uri, requestOptions);
         }
-        
-        public async Task<Plan> GetPlanFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+
+        public async Task<Plan> GetPlanFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            DateTime? requestedDate = null)
         {
             var uri = Configuration.CATALOG_PATH + "/" + Configuration.PLAN;
 
@@ -76,7 +77,8 @@ namespace KillBillClient.Implementations.Managers
         }
 
         // PRICE LIST
-        public async Task<PriceList> GetPriceListFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+        public async Task<PriceList> GetPriceListFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            DateTime? requestedDate = null)
         {
             var uri = Configuration.CATALOG_PATH + "/" + Configuration.PRICELIST;
 
@@ -92,7 +94,8 @@ namespace KillBillClient.Implementations.Managers
         }
 
         // PRODUCT
-        public async Task<Product> GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+        public async Task<Product> GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
+            DateTime? requestedDate = null)
         {
             var uri = Configuration.CATALOG_PATH + "/" + Configuration.PRODUCT;
 

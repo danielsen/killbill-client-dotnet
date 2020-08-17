@@ -6,47 +6,47 @@ namespace KillBillClient.Data
 {
     public class RequestOptionsBuilder
     {
-        private string _requestId;
+        private string _comment;
 
-        private string _user;
-
-        private string _password;
+        private string _contentType = ContentType.Json;
 
         private string _createdBy;
 
-        private string _reason;
+        private bool? _followLocation;
 
-        private string _comment;
+        private Dictionary<string, string> _headers = new Dictionary<string, string>();
+
+        private string _password;
+
+        private MultiMap<string> _queryParams = new MultiMap<string>();
+
+        private MultiMap<string> _queryParamsForFollow = new MultiMap<string>();
+
+        private string _reason;
+        private string _requestId;
 
         private string _tenantApiKey;
 
         private string _tenantApiSecret;
 
-        private string _contentType = ContentType.Json;
+        private string _user;
 
-        private Dictionary<string, string> _headers = new Dictionary<string, string>();
-
-        private MultiMap<string> _queryParams = new MultiMap<string>();
-
-        private bool? _followLocation;
-
-        private MultiMap<string> _queryParamsForFollow = new MultiMap<string>();
-
-        public RequestOptionsBuilder WithRequestId(string requestId)
+        public RequestOptions Build()
         {
-            _requestId = requestId;
+            return new RequestOptions(_requestId, _user, _password, _comment, _reason, _createdBy, _tenantApiKey,
+                _tenantApiSecret, _contentType, _headers.ToImmutableDictionary(), _queryParams, _followLocation,
+                _queryParamsForFollow);
+        }
+
+        public RequestOptionsBuilder WithComment(string comment)
+        {
+            _comment = comment;
             return this;
         }
 
-        public RequestOptionsBuilder WithUser(string user)
+        public RequestOptionsBuilder WithContentType(string contentType)
         {
-            _user = user;
-            return this;
-        }
-
-        public RequestOptionsBuilder WithPassword(string password)
-        {
-            _password = password;
+            _contentType = contentType;
             return this;
         }
 
@@ -56,15 +56,45 @@ namespace KillBillClient.Data
             return this;
         }
 
+        public RequestOptionsBuilder WithFollowLocation(bool? followLocation)
+        {
+            _followLocation = followLocation;
+            return this;
+        }
+
+        public RequestOptionsBuilder WithHeader(string header, string value)
+        {
+            _headers.Add(header, value);
+            return this;
+        }
+
+        public RequestOptionsBuilder WithPassword(string password)
+        {
+            _password = password;
+            return this;
+        }
+
+        public RequestOptionsBuilder WithQueryParams(MultiMap<string> queryParams)
+        {
+            _queryParams = queryParams;
+            return this;
+        }
+
+        public RequestOptionsBuilder WithQueryParamsForFollow(MultiMap<string> queryParamsForFollow)
+        {
+            _queryParamsForFollow = queryParamsForFollow;
+            return this;
+        }
+
         public RequestOptionsBuilder WithReason(string reason)
         {
             _reason = reason;
             return this;
         }
 
-        public RequestOptionsBuilder WithComment(string comment)
+        public RequestOptionsBuilder WithRequestId(string requestId)
         {
-            _comment = comment;
+            _requestId = requestId;
             return this;
         }
 
@@ -80,39 +110,10 @@ namespace KillBillClient.Data
             return this;
         }
 
-        public RequestOptionsBuilder WithContentType(string contentType)
+        public RequestOptionsBuilder WithUser(string user)
         {
-            _contentType = contentType;
+            _user = user;
             return this;
-        }
-
-        public RequestOptionsBuilder WithHeader(string header, string value)
-        {
-            _headers.Add(header, value);
-            return this;
-        }
-
-        public RequestOptionsBuilder WithQueryParams(MultiMap<string> queryParams)
-        {
-            _queryParams = queryParams;
-            return this;
-        }
-
-        public RequestOptionsBuilder WithFollowLocation(bool? followLocation)
-        {
-            _followLocation = followLocation;
-            return this;
-        }
-
-        public RequestOptionsBuilder WithQueryParamsForFollow(MultiMap<string> queryParamsForFollow)
-        {
-            _queryParamsForFollow = queryParamsForFollow;
-            return this;
-        }
-
-        public RequestOptions Build()
-        {
-            return new RequestOptions(_requestId, _user, _password, _comment, _reason, _createdBy, _tenantApiKey, _tenantApiSecret, _contentType, _headers.ToImmutableDictionary(), _queryParams, _followLocation, _queryParamsForFollow);
         }
     }
 }

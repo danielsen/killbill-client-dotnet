@@ -18,7 +18,8 @@ namespace KillBillClient.Implementations.Managers
 
         public KillBillConfiguration Configuration { get; private set; }
 
-        public void StorePluginPropertiesAsParams(Dictionary<string, string> pluginProperties, ref MultiMap<string> queryParams)
+        public void StorePluginPropertiesAsParams(Dictionary<string, string> pluginProperties,
+            ref MultiMap<string> queryParams)
         {
             if (pluginProperties == null)
                 return;
@@ -28,7 +29,8 @@ namespace KillBillClient.Implementations.Managers
                 if (queryParams == null)
                     queryParams = new MultiMap<string>();
 
-                queryParams.Add(Configuration.QUERY_PLUGIN_PROPERTY, $"{Encoding.UTF8.GetBytes(key)}={HttpUtility.UrlEncode(pluginProperties[key])}");
+                queryParams.Add(Configuration.QUERY_PLUGIN_PROPERTY,
+                    $"{Encoding.UTF8.GetBytes(key)}={HttpUtility.UrlEncode(pluginProperties[key])}");
             }
         }
     }

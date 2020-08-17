@@ -21,29 +21,39 @@ namespace KillBillClient.Implementations.Managers
         }
 
         // PAYMENT
-        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction,
+            RequestOptions inputOptions)
         {
-            return await CreatePayment(accountId, null, paymentTransaction, null, new Dictionary<string, string>(), inputOptions);
+            return await CreatePayment(accountId, null, paymentTransaction, null, new Dictionary<string, string>(),
+                inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction, Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, PaymentTransaction paymentTransaction,
+            Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
         {
             return await CreatePayment(accountId, null, paymentTransaction, null, pluginProperties, inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId, PaymentTransaction paymentTransaction, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId,
+            PaymentTransaction paymentTransaction, RequestOptions inputOptions)
         {
-            return await CreatePayment(accountId, paymentMethodId, paymentTransaction, null, new Dictionary<string, string>(), inputOptions);
+            return await CreatePayment(accountId, paymentMethodId, paymentTransaction, null,
+                new Dictionary<string, string>(), inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId, PaymentTransaction paymentTransaction, Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId,
+            PaymentTransaction paymentTransaction, Dictionary<string, string> pluginProperties,
+            RequestOptions inputOptions)
         {
-            return await CreatePayment(accountId, paymentMethodId, paymentTransaction, null, pluginProperties, inputOptions);
+            return await CreatePayment(accountId, paymentMethodId, paymentTransaction, null, pluginProperties,
+                inputOptions);
         }
 
-        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId, PaymentTransaction paymentTransaction, List<string> controlPluginNames, Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
+        public async Task<Payment> CreatePayment(Guid accountId, Guid? paymentMethodId,
+            PaymentTransaction paymentTransaction, List<string> controlPluginNames,
+            Dictionary<string, string> pluginProperties, RequestOptions inputOptions)
         {
-            var allowedTransactionTypes = new[] { "AUTHORIZE", "CREDIT", "PURCHASE" };
+            var allowedTransactionTypes = new[] {"AUTHORIZE", "CREDIT", "PURCHASE"};
             if (accountId.Equals(Guid.Empty))
                 throw new ArgumentException("createPayment#accountId must not be empty");
 
@@ -73,13 +83,15 @@ namespace KillBillClient.Implementations.Managers
 
             StorePluginPropertiesAsParams(pluginProperties, ref param);
             var followLocation = inputOptions.FollowLocation ?? true;
-            var requestOptions = inputOptions.Extend().WithQueryParams(param).WithFollowLocation(followLocation).Build();
+            var requestOptions =
+                inputOptions.Extend().WithQueryParams(param).WithFollowLocation(followLocation).Build();
 
             return await _client.Post<Payment>(uri, paymentTransaction, requestOptions);
         }
 
         // PAYMENTS
-        public async Task<Payments> GetPaymentsForAccount(Guid accountId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Payments> GetPaymentsForAccount(Guid accountId, RequestOptions inputOptions,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENTS;
 
@@ -90,7 +102,8 @@ namespace KillBillClient.Implementations.Managers
             return await _client.Get<Payments>(uri, requestOptions);
         }
 
-        public async Task<InvoicePayments> GetInvoicePaymentsForAccount(Guid accountId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<InvoicePayments> GetInvoicePaymentsForAccount(Guid accountId, RequestOptions inputOptions,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.INVOICE_PAYMENTS;
 
@@ -102,7 +115,8 @@ namespace KillBillClient.Implementations.Managers
         }
 
         // PAYMENT METHODS
-        public async Task<PaymentMethod> GetPaymentMethod(Guid paymentMethodId, RequestOptions inputOptions, bool withPluginInfo = false, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<PaymentMethod> GetPaymentMethod(Guid paymentMethodId, RequestOptions inputOptions,
+            bool withPluginInfo = false, AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
 
@@ -114,7 +128,9 @@ namespace KillBillClient.Implementations.Managers
             return await _client.Get<PaymentMethod>(uri, requestOptions);
         }
 
-        public async Task<PaymentMethods> GetPaymentMethodsForAccount(Guid accountId, RequestOptions inputOptions, Dictionary<string, string> pluginProperties = null, bool withPluginInfo = false, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<PaymentMethods> GetPaymentMethodsForAccount(Guid accountId, RequestOptions inputOptions,
+            Dictionary<string, string> pluginProperties = null, bool withPluginInfo = false,
+            AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENT_METHODS;
 
@@ -140,12 +156,14 @@ namespace KillBillClient.Implementations.Managers
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_PAYMENT_METHOD_IS_DEFAULT, paymentMethod.IsDefault ? "true" : "false");
 
-            var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams).Build();
+            var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams)
+                .Build();
 
             return await _client.Post<PaymentMethod>(uri, paymentMethod, requestOptions);
         }
 
-        public async Task DeletePaymentMethod(Guid paymentMethodId, RequestOptions inputOptions, bool deleteDefault = false, bool forceDeleteDefault = false)
+        public async Task DeletePaymentMethod(Guid paymentMethodId, RequestOptions inputOptions,
+            bool deleteDefault = false, bool forceDeleteDefault = false)
         {
             var uri = Configuration.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
@@ -157,7 +175,8 @@ namespace KillBillClient.Implementations.Managers
 
         public async Task UpdateDefaultPaymentMethod(Guid accountId, Guid paymentMethodId, RequestOptions inputOptions)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENT_METHODS + "/" + paymentMethodId + "/" + Configuration.PAYMENT_METHODS_DEFAULT_PATH_POSTFIX;
+            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENT_METHODS + "/" +
+                      paymentMethodId + "/" + Configuration.PAYMENT_METHODS_DEFAULT_PATH_POSTFIX;
             await _client.Put(uri, null, inputOptions);
         }
     }

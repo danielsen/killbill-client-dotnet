@@ -6,9 +6,9 @@ namespace KillBillClient.Model
 {
     public class EventSubscription : EventBaseSubscription
     {
-        public Guid EventId { get; set; }
-
         [JsonConverter(typeof(ShortDateTimeConverter))]
         public DateTime? EffectiveDate { get; set; }
+
+        public Guid EventId { get; set; }
     }
 }

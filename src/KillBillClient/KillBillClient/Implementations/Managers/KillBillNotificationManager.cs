@@ -29,7 +29,8 @@ namespace KillBillClient.Implementations.Managers
             if (invoiceEmail.AccountId.Equals(Guid.Empty))
                 throw new ArgumentException("invoiceEmail#AccountId can not be empty");
 
-            var uri = Configuration.ACCOUNTS_PATH + "/" + invoiceEmail.AccountId + "/" + Configuration.EMAIL_NOTIFICATIONS;
+            var uri = Configuration.ACCOUNTS_PATH + "/" + invoiceEmail.AccountId + "/" +
+                      Configuration.EMAIL_NOTIFICATIONS;
             await _client.Put(uri, invoiceEmail, inputOptions);
         }
     }

@@ -6,9 +6,9 @@ namespace KillBillClient.Model
     {
         public List<TieredBlock> Blocks { get; set; }
 
-        public List<Limit> Limits { get; set; }
-
         public List<Price> FixedPrice { get; set; }
+
+        public List<Limit> Limits { get; set; }
 
         public List<Price> RecurringPrice { get; set; }
     }

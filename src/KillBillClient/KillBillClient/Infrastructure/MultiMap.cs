@@ -8,8 +8,6 @@ namespace KillBillClient.Infrastructure
 
         public Dictionary<string, List<TV>> Dictionary => _dictionary;
 
-        public IEnumerable<string> Keys => _dictionary.Keys;
-
         public List<TV> this[string key]
         {
             get
@@ -25,11 +23,7 @@ namespace KillBillClient.Infrastructure
             }
         }
 
-        public MultiMap<TV> Create(MultiMap<TV> from)
-        {
-            _dictionary = from.Dictionary;
-            return this;
-        }
+        public IEnumerable<string> Keys => _dictionary.Keys;
 
         public void Add(string key, TV value)
         {
@@ -40,14 +34,20 @@ namespace KillBillClient.Infrastructure
             }
             else
             {
-                list = new List<TV> { value };
+                list = new List<TV> {value};
                 _dictionary[key] = list;
             }
         }
 
-        public void RemoveAll(string key)
+        private void Add(string key, List<TV> queryParam)
         {
-            _dictionary.Remove(key);
+            queryParam.ForEach(x => Add(key, x));
+        }
+
+        public MultiMap<TV> Create(MultiMap<TV> from)
+        {
+            _dictionary = from.Dictionary;
+            return this;
         }
 
         public void PutAll(MultiMap<TV> queryParams)
@@ -66,9 +66,9 @@ namespace KillBillClient.Infrastructure
             }
         }
 
-        private void Add(string key, List<TV> queryParam)
+        public void RemoveAll(string key)
         {
-            queryParam.ForEach(x => Add(key, x));
+            _dictionary.Remove(key);
         }
     }
 }

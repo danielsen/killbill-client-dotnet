@@ -4,19 +4,18 @@ namespace KillBillClient.Model
 {
     public class BlockingState : KillBillObject
     {
-        public Guid BlockedId { get; set; }
-
-        public string StateName { get; set; }
-
-        public string Service { get; set; }
+        public bool BlockBilling { get; set; }
 
         public bool BlockChange { get; set; }
+        public Guid BlockedId { get; set; }
 
         public bool BlockEntitlement { get; set; }
 
-        public bool BlockBilling { get; set; }
-
         public DateTime EffectiveDate { get; set; }
+
+        public string Service { get; set; }
+
+        public string StateName { get; set; }
 
         public BlockingStateType Type { get; set; }
 
@@ -25,14 +24,16 @@ namespace KillBillClient.Model
             if (this == o) return true;
             if (!(o is BlockingState)) return false;
 
-            BlockingState that = (BlockingState)o;
+            BlockingState that = (BlockingState) o;
             if (BlockedId != null ? !BlockedId.Equals(that.BlockedId) : that.BlockedId != null) return false;
             if (StateName != null ? !StateName.Equals(that.StateName) : that.StateName != null) return false;
             if (Service != null ? !Service.Equals(that.Service) : that.Service != null) return false;
             if (!BlockChange.Equals(that.BlockChange)) return false;
             if (!BlockEntitlement.Equals(that.BlockEntitlement)) return false;
             if (!BlockBilling.Equals(that.BlockBilling)) return false;
-            if (EffectiveDate != null ? EffectiveDate.CompareTo(that.EffectiveDate) != 0 : that.EffectiveDate != null) return false;
+            if (EffectiveDate != null
+                ? EffectiveDate.CompareTo(that.EffectiveDate) != 0
+                : that.EffectiveDate != null) return false;
             return Type == that.Type;
         }
 

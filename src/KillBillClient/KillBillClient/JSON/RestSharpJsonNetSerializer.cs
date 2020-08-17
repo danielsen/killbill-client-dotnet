@@ -45,12 +45,12 @@ namespace KillBillClient.JSON
         /// <summary>
         /// Unused for JSON Serialization
         /// </summary>
-        public string RootElement { get; set; }
+        public string Namespace { get; set; }
 
         /// <summary>
         /// Unused for JSON Serialization
         /// </summary>
-        public string Namespace { get; set; }
+        public string RootElement { get; set; }
 
         /// <summary>
         /// Content type for serialized content

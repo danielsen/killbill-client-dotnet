@@ -5,49 +5,48 @@ namespace KillBillClient.Model
 {
     public class Account : KillBillObject
     {
-        public Guid AccountId { get; set; }
+        public double AccountBalance { get; set; }
 
         public double AccountCBA { get; set; }
-
-        public string Name { get; set; }
-
-        public int FirstNameLength { get; set; }
-
-        public string ExternalKey { get; set; }
-
-        public string Email { get; set; }
-
-        public int BillCycleDayLocal { get; set; }
-
-        public string Currency { get; set; }
-
-        public Guid PaymentMethodId { get; set; }
-
-        public string TimeZone { get; set; }
+        public Guid AccountId { get; set; }
 
         public string Address1 { get; set; }
 
         public string Address2 { get; set; }
 
-        public string PostalCode { get; set; }
-
-        public string Company { get; set; }
+        public int BillCycleDayLocal { get; set; }
 
         public string City { get; set; }
 
-        public string State { get; set; }
+        public string Company { get; set; }
 
         public string Country { get; set; }
 
-        public string Locale { get; set; }
+        public string Currency { get; set; }
 
-        public string Phone { get; set; }
+        public string Email { get; set; }
+
+        public string ExternalKey { get; set; }
+
+        public int FirstNameLength { get; set; }
 
         public bool IsMigrated { get; set; }
 
         public bool IsNotifiedForInvoices { get; set; }
 
-        public double AccountBalance { get; set; }
+        public string Locale { get; set; }
+
+        public string Name { get; set; }
+
+        public Guid PaymentMethodId { get; set; }
+
+        public string Phone { get; set; }
+
+        public string PostalCode { get; set; }
+
+        public string State { get; set; }
+
+        public string TimeZone { get; set; }
 
         public override string ToString()
         {
