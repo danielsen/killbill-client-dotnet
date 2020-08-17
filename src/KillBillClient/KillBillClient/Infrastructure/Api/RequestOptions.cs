@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using KillBillClient.Infrastructure.Configuration;
+using KillBillClient.Infrastructure.Data;
 
 namespace KillBillClient.Infrastructure.Api
 {
@@ -16,7 +17,7 @@ namespace KillBillClient.Infrastructure.Api
             string createdBy,
             string tenantApiKey,
             string tenantApiSecret,
-            string contentType,
+            RequestContentType contentType,
             ImmutableDictionary<string, string> headers,
             MultiMap<string> queryParams,
             bool? followLocation,
@@ -31,7 +32,7 @@ namespace KillBillClient.Infrastructure.Api
             TenantApiKey = tenantApiKey;
             TenantApiSecret = tenantApiSecret;
             FollowLocation = followLocation;
-            ContentType = contentType ?? Data.ContentType.Json;
+            ContentType = contentType ?? RequestContentType.AsJson();
             Headers = headers ?? ImmutableDictionary<string, string>.Empty;
             QueryParams = queryParams ?? new MultiMap<string>();
             QueryParamsForFollow = queryParamsForFollow ?? new MultiMap<string>();
@@ -39,7 +40,7 @@ namespace KillBillClient.Infrastructure.Api
 
         public string Comment { get; }
 
-        public string ContentType { get; }
+        public RequestContentType ContentType { get; }
 
         public string CreatedBy { get; }
 
@@ -86,7 +87,7 @@ namespace KillBillClient.Infrastructure.Api
                 .WithRequestId(Guid.NewGuid().ToString())
                 .WithCreatedBy("Default User")
                 .WithPassword(config.HttpPassword)
-                .WithContentType(Data.ContentType.Json)
+                .WithJsonContentType()
                 .Build();
         }
 

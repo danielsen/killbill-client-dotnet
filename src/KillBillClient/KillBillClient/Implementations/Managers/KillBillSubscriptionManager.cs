@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillBillClient.Core.Models;
-using KillBillClient.Data;
 using KillBillClient.Infrastructure;
 using KillBillClient.Infrastructure.Api;
 using KillBillClient.Infrastructure.Api.Interfaces;
 using KillBillClient.Infrastructure.Api.Interfaces.Managers;
+using KillBillClient.Infrastructure.Data;
 using KillBillClient.Infrastructure.Extensions;
 
 namespace KillBillClient.Implementations.Managers

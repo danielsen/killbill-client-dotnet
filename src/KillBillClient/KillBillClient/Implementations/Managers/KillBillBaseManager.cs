@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using KillBillClient.Core;
-using KillBillClient.Data;
 using KillBillClient.Infrastructure;
 using KillBillClient.Infrastructure.Configuration;
+using KillBillClient.Infrastructure.Data;
 
 namespace KillBillClient.Implementations.Managers
 {

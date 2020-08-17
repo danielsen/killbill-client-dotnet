@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using KillBillClient.Data;
 using KillBillClient.Infrastructure.Api;
 using KillBillClient.Infrastructure.Api.Interfaces;
 

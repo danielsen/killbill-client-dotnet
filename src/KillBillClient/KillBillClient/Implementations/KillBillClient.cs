@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using KillBillClient.Core;
 using KillBillClient.Core.Models;
-using KillBillClient.Data;
 using KillBillClient.Implementations.Managers;
 using KillBillClient.Infrastructure.Api;
 using KillBillClient.Infrastructure.Api.Interfaces;

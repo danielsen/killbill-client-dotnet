@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace KillBillClient.Infrastructure
+namespace KillBillClient.Infrastructure.Data
 {
     public class MultiMap<TV>
     {

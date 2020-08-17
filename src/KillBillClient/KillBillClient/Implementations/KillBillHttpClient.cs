@@ -3,11 +3,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using KillBillClient.Core.Models;
-using KillBillClient.Data;
 using KillBillClient.Infrastructure;
 using KillBillClient.Infrastructure.Api;
 using KillBillClient.Infrastructure.Api.Interfaces;
 using KillBillClient.Infrastructure.Configuration;
+using KillBillClient.Infrastructure.Data;
 using KillBillClient.Infrastructure.Exceptions;
 using KillBillClient.Infrastructure.Extensions;
 using KillBillClient.Infrastructure.Json;
@@ -26,42 +26,39 @@ namespace KillBillClient.Implementations
             _config = config;
         }
 
-        private void AddRequestBody(IRestRequest request, object body, string contentType)
+        private void AddRequestBody(IRestRequest request, object body, RequestContentType contentType)
         {
-            switch (contentType)
+            if (contentType.IsXml)
             {
-                case ContentType.Xml:
-                    request.AddParameter("text/xml", body, ParameterType.RequestBody);
-                    return;
-                default:
-                    try
-                    {
-                        request.AddBody(body);
-                        return;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new KillBillClientException("Error serializing object for API request.", ex);
-                    }
+                request.AddParameter("text/xml", body, ParameterType.RequestBody);
+                return;
+            }
+
+            try
+            {
+                request.AddBody(body);
+                return;
+            }
+            catch (Exception ex)
+            {
+                throw new KillBillClientException("Error serializing object for API request.", ex);
             }
         }
 
-        private IRestRequest BuildRequestForFormat(string uri, Method method, string contentType)
+        private IRestRequest BuildRequestForFormat(string uri, Method method, RequestContentType contentType)
         {
-            switch (contentType)
+            if (contentType.IsXml)
             {
-                case ContentType.Xml:
-                    return new RestRequest(uri, method)
-                    {
-                        RequestFormat = DataFormat.Xml
-                    };
-                default:
-                    return new RestRequest(uri, method)
-                    {
-                        RequestFormat = DataFormat.Json,
-                        JsonSerializer = new RestSharpJsonNetSerializer()
-                    };
+                return new RestRequest(uri, method)
+                {
+                    RequestFormat = DataFormat.Xml
+                };
             }
+            return new RestRequest(uri, method)
+            {
+                RequestFormat = DataFormat.Json,
+                JsonSerializer = new RestSharpJsonNetSerializer()
+            };
         }
 
         private IRestRequest BuildRequestWithHeaderAndQuery(Method method, string uri, RequestOptions requestOptions)
@@ -81,7 +78,7 @@ namespace KillBillClient.Implementations
             if (requestOptions.Reason != null)
                 request.AddHeader(_config.HDR_REASON, requestOptions.Reason);
 
-            request.AddHeader("Content-Type", requestOptions.ContentType);
+            request.AddHeader("Content-Type", requestOptions.ContentType.ToString());
             request.AddHeader("Accept", "application/json, text/html");
 
             foreach (var key in requestOptions.QueryParams.Keys)

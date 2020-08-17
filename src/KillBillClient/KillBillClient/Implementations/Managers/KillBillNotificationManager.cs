@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using KillBillClient.Core.Models;
-using KillBillClient.Data;
 using KillBillClient.Infrastructure.Api;
 using KillBillClient.Infrastructure.Api.Interfaces;
 using KillBillClient.Infrastructure.Api.Interfaces.Managers;

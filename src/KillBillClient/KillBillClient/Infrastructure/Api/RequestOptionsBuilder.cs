@@ -1,14 +1,35 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using KillBillClient.Data;
+using KillBillClient.Infrastructure.Data;
+using ContentType = System.Net.Mime.ContentType;
 
 namespace KillBillClient.Infrastructure.Api
 {
+    public class RequestContentType
+    {
+        private const string _json = "application/json; charset=utf-8";
+        private const string _xml = "application/xml; charset=utf-8";
+
+        private ContentType ContentType { get; }
+        public bool IsJson => ContentType.ToString() == _json;
+        public bool IsXml => ContentType.ToString() == _xml;
+
+        private RequestContentType(string contentType)
+        {
+            ContentType = new ContentType(contentType);
+        }
+        
+        public static RequestContentType AsJson() => new RequestContentType(_json);
+        public static RequestContentType AsXml() => new RequestContentType(_xml);
+
+        public override string ToString() => ContentType.ToString();
+    }
+    
     public class RequestOptionsBuilder
     {
         private string _comment;
 
-        private string _contentType = ContentType.Json;
+        private RequestContentType _contentType = RequestContentType.AsJson();
 
         private string _createdBy;
 
@@ -44,7 +65,7 @@ namespace KillBillClient.Infrastructure.Api
             return this;
         }
 
-        public RequestOptionsBuilder WithContentType(string contentType)
+        public RequestOptionsBuilder WithContentType(RequestContentType contentType)
         {
             _contentType = contentType;
             return this;
@@ -65,6 +86,12 @@ namespace KillBillClient.Infrastructure.Api
         public RequestOptionsBuilder WithHeader(string header, string value)
         {
             _headers.Add(header, value);
+            return this;
+        }
+
+        public RequestOptionsBuilder WithJsonContentType()
+        {
+            _contentType = RequestContentType.AsJson();
             return this;
         }
 
@@ -113,6 +140,12 @@ namespace KillBillClient.Infrastructure.Api
         public RequestOptionsBuilder WithUser(string user)
         {
             _user = user;
+            return this;
+        }
+
+        public RequestOptionsBuilder WithXmlContentType()
+        {
+            _contentType = RequestContentType.AsXml();
             return this;
         }
     }
