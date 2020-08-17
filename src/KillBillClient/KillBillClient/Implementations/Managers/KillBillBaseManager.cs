@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
-using KillBillClient.Configuration;
+using KillBillClient.Core;
 using KillBillClient.Data;
 using KillBillClient.Infrastructure;
+using KillBillClient.Infrastructure.Configuration;
 
 namespace KillBillClient.Implementations.Managers
 {

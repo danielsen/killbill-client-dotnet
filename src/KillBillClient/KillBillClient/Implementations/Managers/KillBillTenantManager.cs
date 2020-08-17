@@ -1,10 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
 using KillBillClient.Infrastructure;
-using KillBillClient.Interfaces;
-using KillBillClient.Interfaces.Managers;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Api.Interfaces.Managers;
 
 namespace KillBillClient.Implementations.Managers
 {
@@ -37,7 +38,7 @@ namespace KillBillClient.Implementations.Managers
 
         public async Task<Tenant> GetTenant(Guid tenantId, RequestOptions inputOptions)
         {
-            var uri = Configuration.TENANTS_PATH + "/" + tenantId;
+            var uri = $"{Configuration.TENANTS_PATH}/{tenantId}";
             return await _client.Get<Tenant>(uri, inputOptions);
         }
 
@@ -53,7 +54,7 @@ namespace KillBillClient.Implementations.Managers
         // TENANT KEY
         public async Task<TenantKey> RegisterCallBackNotificationForTenant(string callback, RequestOptions inputOptions)
         {
-            var uri = Configuration.TENANTS_PATH + "/" + Configuration.REGISTER_NOTIFICATION_CALLBACK;
+            var uri = $"{Configuration.TENANTS_PATH}/{Configuration.REGISTER_NOTIFICATION_CALLBACK}";
             var followLocation = inputOptions.FollowLocation ?? true;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_NOTIFICATION_CALLBACK, callback);
@@ -64,13 +65,13 @@ namespace KillBillClient.Implementations.Managers
 
         public async Task UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions)
         {
-            var uri = Configuration.TENANTS_PATH + "/" + Configuration.LEGACY_REGISTER_NOTIFICATION_CALLBACK;
+            var uri = $"{Configuration.TENANTS_PATH}/{Configuration.LEGACY_REGISTER_NOTIFICATION_CALLBACK}";
             await _client.Delete(uri, inputOptions);
         }
 
         public async Task<TenantKey> GetCallbackNotificationForTenant(RequestOptions inputOptions)
         {
-            var uri = Configuration.TENANTS_PATH + "/" + Configuration.REGISTER_NOTIFICATION_CALLBACK;
+            var uri = $"{Configuration.TENANTS_PATH}/{Configuration.REGISTER_NOTIFICATION_CALLBACK}";
             return await _client.Get<TenantKey>(uri, inputOptions);
         }
     }

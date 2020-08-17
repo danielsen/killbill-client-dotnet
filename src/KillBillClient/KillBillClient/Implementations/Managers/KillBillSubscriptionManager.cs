@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
-using KillBillClient.Extensions;
 using KillBillClient.Infrastructure;
-using KillBillClient.Interfaces;
-using KillBillClient.Interfaces.Managers;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Api.Interfaces.Managers;
+using KillBillClient.Infrastructure.Extensions;
 
 namespace KillBillClient.Implementations.Managers
 {
@@ -43,7 +44,7 @@ namespace KillBillClient.Implementations.Managers
         // SUBSCRIPTION
         public async Task<Subscription> GetSubscription(Guid subscriptionId, RequestOptions inputOptions)
         {
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
+            var uri = $"{Configuration.SUBSCRIPTIONS_PATH}/{subscriptionId}";
             return await _client.Get<Subscription>(uri, inputOptions);
         }
 
@@ -88,7 +89,7 @@ namespace KillBillClient.Implementations.Managers
 
             ValidateSubscription(subscription, false);
 
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscription.SubscriptionId;
+            var uri = $"{Configuration.SUBSCRIPTIONS_PATH}/{subscription.SubscriptionId}";
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
 
             // if (timeoutSec.HasValue)
@@ -115,7 +116,7 @@ namespace KillBillClient.Implementations.Managers
             DateTime? requestedDate = null, bool? useRequestedDateForBilling = null,
             EntitlementActionPolicy? entitlementPolicy = null, BillingActionPolicy? billingPolicy = null)
         {
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
+            var uri = $"{Configuration.SUBSCRIPTIONS_PATH}/{subscriptionId}";
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
 
             // if (timeoutSec.HasValue)
@@ -154,7 +155,7 @@ namespace KillBillClient.Implementations.Managers
         {
             if (subscriptionId == Guid.Empty) throw new ArgumentNullException(nameof(subscriptionId));
 
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + Configuration.UNCANCEL;
+            var uri = $"{Configuration.SUBSCRIPTIONS_PATH}/{subscriptionId}/{Configuration.UNCANCEL}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
@@ -179,7 +180,7 @@ namespace KillBillClient.Implementations.Managers
                 queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
 
             // var httpTimeout = Math.Max(Configuration.DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec ?? 0);
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + Configuration.CREATEENTITLEMENT_WITHADDONS;
+            var uri = $"{Configuration.SUBSCRIPTIONS_PATH}/{Configuration.CREATEENTITLEMENT_WITHADDONS}";
             var followLocation = inputOptions.FollowLocation ?? true;
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation)
                 .Build();
@@ -206,7 +207,7 @@ namespace KillBillClient.Implementations.Managers
                 queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
 
             // var httpTimeout = Math.Max(Configuration.DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec ?? 0);
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + Configuration.CREATEENTITLEMENTS_WITHADDONS;
+            var uri = $"{Configuration.SUBSCRIPTIONS_PATH}/{Configuration.CREATEENTITLEMENTS_WITHADDONS}";
             var followLocation = inputOptions.FollowLocation ?? true;
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation)
                 .Build();
@@ -220,7 +221,7 @@ namespace KillBillClient.Implementations.Managers
         {
             if (subscriptionId == Guid.Empty) throw new ArgumentNullException(nameof(subscriptionId));
 
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + Configuration.BLOCK;
+            var uri = $"{Configuration.SUBSCRIPTIONS_PATH}/{subscriptionId}/{Configuration.BLOCK}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             if (requestedDate.HasValue)

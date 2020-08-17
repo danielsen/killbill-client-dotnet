@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
+using KillBillClient.Core;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
-using KillBillClient.Extensions;
 using KillBillClient.Infrastructure;
-using KillBillClient.Interfaces;
-using KillBillClient.Interfaces.Managers;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Api.Interfaces.Managers;
+using KillBillClient.Infrastructure.Extensions;
 
 namespace KillBillClient.Implementations.Managers
 {
@@ -24,7 +26,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<Account> GetAccount(Guid accountId, RequestOptions inputOptions, bool withBalance = false,
             bool withCba = false)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false");
@@ -60,7 +62,7 @@ namespace KillBillClient.Implementations.Managers
 
         public async Task<Account> UpdateAccount(Account account, bool treatNullAsReset, RequestOptions inputOptions)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + account.AccountId;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{account.AccountId}";
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_ACCOUNT_TREAT_NULL_AS_RESET, treatNullAsReset ? "true" : "false");
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
@@ -72,7 +74,7 @@ namespace KillBillClient.Implementations.Managers
         {
             if (accountId == Guid.Empty) throw new ArgumentNullException(nameof(accountId));
 
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.BLOCK;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.BLOCK}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             if (requestedDate.HasValue)
@@ -92,7 +94,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<Accounts> GetAccounts(long offset, long limit, RequestOptions inputOptions,
             AuditLevel auditLevel = AuditLevel.NONE)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + Configuration.PAGINATION;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{Configuration.PAGINATION}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_SEARCH_OFFSET, offset.ToString());
@@ -107,7 +109,7 @@ namespace KillBillClient.Implementations.Managers
         // ACCOUNT EMAILS
         public async Task<AccountEmails> GetEmailsForAccount(Guid accountId, RequestOptions inputOptions)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.EMAILS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.EMAILS}";
             return await _client.Get<AccountEmails>(uri, inputOptions);
         }
 
@@ -119,7 +121,7 @@ namespace KillBillClient.Implementations.Managers
             if (email.AccountId.Equals(Guid.Empty))
                 throw new ArgumentException("AccountEmail#accountId cannot be empty");
 
-            var uri = Configuration.ACCOUNTS_PATH + "/" + email.AccountId + "/" + Configuration.EMAILS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{email.AccountId}/{Configuration.EMAILS}";
 
             await _client.Post(uri, email, inputOptions);
         }
@@ -132,8 +134,8 @@ namespace KillBillClient.Implementations.Managers
             if (email.AccountId.Equals(Guid.Empty))
                 throw new ArgumentException("AccountEmail#accountId cannot be empty");
 
-            var uri = Configuration.ACCOUNTS_PATH + "/" + email.AccountId + "/" + Configuration.EMAILS + "/" +
-                      HttpUtility.UrlEncode(email.Email);
+            var uri =
+                $"{Configuration.ACCOUNTS_PATH}/{email.AccountId}/{Configuration.EMAILS}/{HttpUtility.UrlEncode(email.Email)}";
 
             await _client.Delete(uri, inputOptions);
         }
@@ -142,7 +144,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<AccountTimeline> GetAccountTimeline(Guid accountId, RequestOptions inputOptions,
             AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.TIMELINE;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.TIMELINE}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_AUDIT, auditLevel.ToString());
@@ -154,13 +156,13 @@ namespace KillBillClient.Implementations.Managers
         // ACCOUNT BUNDLES
         public async Task<Bundles> GetAccountBundles(Guid accountId, RequestOptions inputOptions)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.BUNDLES;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.BUNDLES}";
             return await _client.Get<Bundles>(uri, inputOptions);
         }
 
         public async Task<Bundles> GetAccountBundles(Guid accountId, string externalKey, RequestOptions inputOptions)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.BUNDLES;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.BUNDLES}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_EXTERNAL_KEY, externalKey);

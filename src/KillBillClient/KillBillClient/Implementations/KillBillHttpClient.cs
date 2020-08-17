@@ -2,13 +2,15 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using KillBillClient.Configuration;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
-using KillBillClient.Extensions;
 using KillBillClient.Infrastructure;
-using KillBillClient.Interfaces;
-using KillBillClient.JSON;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Configuration;
+using KillBillClient.Infrastructure.Exceptions;
+using KillBillClient.Infrastructure.Extensions;
+using KillBillClient.Infrastructure.Json;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -118,7 +120,7 @@ namespace KillBillClient.Implementations
                 var billingException =
                     JsonConvert.DeserializeObject<BillingException>(response.Content,
                         JsonNetSerializationSettings.GetDefault());
-                var message = "Error " + response.StatusCode + " from Kill Bill " + billingException.Message;
+                var message = $"Error {response.StatusCode} from Kill Bill {billingException.Message}";
                 throw new KillBillClientException(message, response.StatusCode.ToString(), billingException.Code,
                     billingException.Message);
             }
@@ -290,10 +292,7 @@ namespace KillBillClient.Implementations
             return data;
         }
 
-        public KillBillConfiguration Configuration
-        {
-            get { return _config; }
-        }
+        public KillBillConfiguration Configuration => _config;
 
         // GET
         // -------------------------------------------------------------------------------

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
-using KillBillClient.Extensions;
 using KillBillClient.Infrastructure;
-using KillBillClient.Interfaces;
-using KillBillClient.Interfaces.Managers;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Api.Interfaces.Managers;
+using KillBillClient.Infrastructure.Extensions;
 
 namespace KillBillClient.Implementations.Managers
 {
@@ -44,13 +45,13 @@ namespace KillBillClient.Implementations.Managers
         // PLAN
         public async Task<List<PlanDetail>> GetBasePlans(RequestOptions inputOptions)
         {
-            var uri = Configuration.CATALOG_PATH + "/" + Configuration.AVAILABLEBASEPLANS;
+            var uri = $"{Configuration.CATALOG_PATH}/{Configuration.AVAILABLEBASEPLANS}";
             return await _client.Get<List<PlanDetail>>(uri, inputOptions);
         }
 
         public async Task<List<PlanDetail>> GetAvailableAddons(string baseProductName, RequestOptions inputOptions)
         {
-            var uri = Configuration.CATALOG_PATH + "/" + Configuration.AVAILABLEADDONS;
+            var uri = $"{Configuration.CATALOG_PATH}/{Configuration.AVAILABLEADDONS}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add("baseProductName", baseProductName);
@@ -63,7 +64,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<Plan> GetPlanFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
             DateTime? requestedDate = null)
         {
-            var uri = Configuration.CATALOG_PATH + "/" + Configuration.PLAN;
+            var uri = $"{Configuration.CATALOG_PATH}/{Configuration.PLAN}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_SUBSCRIPTION_ID, subscriptionId.ToString());
@@ -80,7 +81,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<PriceList> GetPriceListFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
             DateTime? requestedDate = null)
         {
-            var uri = Configuration.CATALOG_PATH + "/" + Configuration.PRICELIST;
+            var uri = $"{Configuration.CATALOG_PATH}/{Configuration.PRICELIST}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_SUBSCRIPTION_ID, subscriptionId.ToString());
@@ -97,7 +98,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<Product> GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions,
             DateTime? requestedDate = null)
         {
-            var uri = Configuration.CATALOG_PATH + "/" + Configuration.PRODUCT;
+            var uri = $"{Configuration.CATALOG_PATH}/{Configuration.PRODUCT}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_SUBSCRIPTION_ID, subscriptionId.ToString());

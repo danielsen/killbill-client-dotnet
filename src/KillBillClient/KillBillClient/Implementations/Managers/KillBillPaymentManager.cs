@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KillBillClient.Core;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
 using KillBillClient.Infrastructure;
-using KillBillClient.Interfaces;
-using KillBillClient.Interfaces.Managers;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Api.Interfaces.Managers;
 
 namespace KillBillClient.Implementations.Managers
 {
@@ -61,7 +63,7 @@ namespace KillBillClient.Implementations.Managers
                 throw new ArgumentNullException(nameof(paymentTransaction));
 
             if (!allowedTransactionTypes.Contains(paymentTransaction.TransactionType))
-                throw new ArgumentException("Invalid paymentTransaction type " + paymentTransaction.TransactionType);
+                throw new ArgumentException($"Invalid paymentTransaction type {paymentTransaction.TransactionType}");
 
             if (paymentTransaction.Amount <= 0)
                 throw new ArgumentException("PaymentTransaction#amount cannot be 0 or less");
@@ -69,7 +71,7 @@ namespace KillBillClient.Implementations.Managers
             if (paymentTransaction.Currency == null)
                 throw new ArgumentException("PaymentTransaction#currency cannot be null");
 
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENTS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.PAYMENTS}";
 
             var param = new MultiMap<string>().Create(inputOptions.QueryParams);
 
@@ -93,7 +95,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<Payments> GetPaymentsForAccount(Guid accountId, RequestOptions inputOptions,
             AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENTS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.PAYMENTS}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_AUDIT, auditLevel.ToString());
@@ -105,7 +107,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<InvoicePayments> GetInvoicePaymentsForAccount(Guid accountId, RequestOptions inputOptions,
             AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.INVOICE_PAYMENTS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.INVOICE_PAYMENTS}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_AUDIT, auditLevel.ToString());
@@ -118,7 +120,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<PaymentMethod> GetPaymentMethod(Guid paymentMethodId, RequestOptions inputOptions,
             bool withPluginInfo = false, AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
+            var uri = $"{Configuration.PAYMENT_METHODS_PATH}/{paymentMethodId}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_WITH_PLUGIN_INFO, withPluginInfo.ToString());
@@ -132,7 +134,7 @@ namespace KillBillClient.Implementations.Managers
             Dictionary<string, string> pluginProperties = null, bool withPluginInfo = false,
             AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENT_METHODS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.PAYMENT_METHODS}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_WITH_PLUGIN_INFO, withPluginInfo.ToString());
@@ -151,7 +153,7 @@ namespace KillBillClient.Implementations.Managers
             if (paymentMethod.AccountId.Equals(Guid.Empty) || string.IsNullOrEmpty(paymentMethod.PluginName))
                 throw new ArgumentException("paymentMethod#accountId and paymentMethod#pluginName must not be empty");
 
-            var uri = Configuration.ACCOUNTS_PATH + "/" + paymentMethod.AccountId + "/" + Configuration.PAYMENT_METHODS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{paymentMethod.AccountId}/{Configuration.PAYMENT_METHODS}";
             var followLocation = inputOptions.FollowLocation ?? true;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_PAYMENT_METHOD_IS_DEFAULT, paymentMethod.IsDefault ? "true" : "false");
@@ -165,7 +167,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task DeletePaymentMethod(Guid paymentMethodId, RequestOptions inputOptions,
             bool deleteDefault = false, bool forceDeleteDefault = false)
         {
-            var uri = Configuration.PAYMENT_METHODS_PATH + "/" + paymentMethodId;
+            var uri = $"{Configuration.PAYMENT_METHODS_PATH}/{paymentMethodId}";
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, deleteDefault.ToString());
             queryParams.Add(Configuration.QUERY_FORCE_DEFAULT_PM_DELETION, forceDeleteDefault.ToString());
@@ -175,8 +177,8 @@ namespace KillBillClient.Implementations.Managers
 
         public async Task UpdateDefaultPaymentMethod(Guid accountId, Guid paymentMethodId, RequestOptions inputOptions)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.PAYMENT_METHODS + "/" +
-                      paymentMethodId + "/" + Configuration.PAYMENT_METHODS_DEFAULT_PATH_POSTFIX;
+            var uri =
+                $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.PAYMENT_METHODS}/{paymentMethodId}/{Configuration.PAYMENT_METHODS_DEFAULT_PATH_POSTFIX}";
             await _client.Put(uri, null, inputOptions);
         }
     }

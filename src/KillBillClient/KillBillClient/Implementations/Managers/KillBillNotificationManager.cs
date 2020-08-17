@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
-using KillBillClient.Interfaces;
-using KillBillClient.Interfaces.Managers;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Api.Interfaces.Managers;
 
 namespace KillBillClient.Implementations.Managers
 {
@@ -20,7 +21,7 @@ namespace KillBillClient.Implementations.Managers
         // INVOICE EMAIL
         public async Task<InvoiceEmail> GetEmailNotificationsForAccount(Guid accountId, RequestOptions inputOptions)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.EMAIL_NOTIFICATIONS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.EMAIL_NOTIFICATIONS}";
             return await _client.Get<InvoiceEmail>(uri, inputOptions);
         }
 
@@ -29,8 +30,7 @@ namespace KillBillClient.Implementations.Managers
             if (invoiceEmail.AccountId.Equals(Guid.Empty))
                 throw new ArgumentException("invoiceEmail#AccountId can not be empty");
 
-            var uri = Configuration.ACCOUNTS_PATH + "/" + invoiceEmail.AccountId + "/" +
-                      Configuration.EMAIL_NOTIFICATIONS;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{invoiceEmail.AccountId}/{Configuration.EMAIL_NOTIFICATIONS}";
             await _client.Put(uri, invoiceEmail, inputOptions);
         }
     }

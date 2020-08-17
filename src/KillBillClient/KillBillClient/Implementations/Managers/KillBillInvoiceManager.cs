@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using KillBillClient.Core;
+using KillBillClient.Core.Models;
 using KillBillClient.Data;
-using KillBillClient.Extensions;
 using KillBillClient.Infrastructure;
-using KillBillClient.Interfaces;
-using KillBillClient.Interfaces.Managers;
-using KillBillClient.Model;
+using KillBillClient.Infrastructure.Api;
+using KillBillClient.Infrastructure.Api.Interfaces;
+using KillBillClient.Infrastructure.Api.Interfaces.Managers;
+using KillBillClient.Infrastructure.Extensions;
 
 namespace KillBillClient.Implementations.Managers
 {
@@ -25,7 +27,7 @@ namespace KillBillClient.Implementations.Managers
             IEnumerable<InvoiceItem> externalCharges, DateTime? requestedDate, bool autoPay, bool autoCommit,
             string paymentExternalKey, string transactionExternalKey, RequestOptions inputOptions)
         {
-            var uri = Configuration.INVOICES_PATH + "/" + Configuration.CHARGES + "/" + accountId;
+            var uri = $"{Configuration.INVOICES_PATH}/{Configuration.CHARGES}/{accountId}";
 
             var queryParams = new MultiMap<string>();
 
@@ -55,7 +57,7 @@ namespace KillBillClient.Implementations.Managers
         private async Task<Invoice> GetInvoiceByIdOrNumber(string invoiceIdOrNumber, RequestOptions inputOptions,
             bool withItems = false, bool withChildrenItems = false, AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.INVOICES_PATH + "/" + invoiceIdOrNumber;
+            var uri = $"{Configuration.INVOICES_PATH}/{invoiceIdOrNumber}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_INVOICE_WITH_ITEMS, withItems.ToString());
@@ -71,7 +73,7 @@ namespace KillBillClient.Implementations.Managers
             RequestOptions inputOptions)
         {
             var utf = Encoding.UTF8.GetBytes(key);
-            var uri = Configuration.INVOICES_PATH + "/" + Configuration.SEARCH + "/" + Encoding.UTF8.GetString(utf);
+            var uri = $"{Configuration.INVOICES_PATH}/{Configuration.SEARCH}/{Encoding.UTF8.GetString(utf)}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_SEARCH_OFFSET, offset.ToString());
@@ -120,7 +122,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<Invoices> GetInvoices(bool withItems, long offset, long limit, RequestOptions inputOptions,
             AuditLevel auditLevel = AuditLevel.NONE)
         {
-            var uri = Configuration.INVOICES_PATH + "/" + Configuration.PAGINATION;
+            var uri = $"{Configuration.INVOICES_PATH}/{Configuration.PAGINATION}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_SEARCH_OFFSET, offset.ToString());
@@ -137,7 +139,7 @@ namespace KillBillClient.Implementations.Managers
             bool withItems = false, bool unpaidOnly = false, bool includeMigrationInvoices = false,
             AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.INVOICES;
+            var uri = $"{Configuration.ACCOUNTS_PATH}/{accountId}/{Configuration.INVOICES}";
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_INVOICE_WITH_ITEMS, withItems.ToString());
@@ -222,7 +224,7 @@ namespace KillBillClient.Implementations.Managers
         public async Task<Credit> GetCredit(Guid creditId, RequestOptions inputOptions,
             AuditLevel auditLevel = DefaultAuditLevel)
         {
-            var uri = Configuration.CREDITS_PATH + "/" + creditId;
+            var uri = $"{Configuration.CREDITS_PATH}/{creditId}";
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_AUDIT, auditLevel.ToString());
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
